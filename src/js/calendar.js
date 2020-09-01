@@ -26,11 +26,13 @@
   };
 
   function getWeek(year, month) {
-    var date = new Date();
-    date.setYear(year);
-    date.setMonth(month - 1);
-    date.setDate(1);
-    return date.getDay();
+    // var date = new Date();
+    // date.setYear(year);
+    // date.setMonth(month - 1);
+    // date.setDate(1);
+    // return date.getDay();
+    var str = year+'/'+month+'/1'
+    return new Date(str).getDay()
   }
 
   function Calendar(opt) {
@@ -70,27 +72,37 @@
         '<ul class="clearfix">';
 
       startDay = getWeek(currentYear, startMonth);
-
+      //console.log(new Date('2020/9/1').getDay()-1)
+      console.log('startDay',startDay,currentYear, startMonth)
       for (var j = 0; j < startDay; j += 1) {
-        str += '<li><span></span><span></span></li>';
+        str += '<li><p></p><span></span></li>';
       }
 
       for (var k = 1; k <= monthDays;) {
         if (currentDate === k && (currentMonth + 1) === startMonth && currentYear === _this.currentYear) {
-          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><span>今天</span><span class="red">￥' + _this.priceData[priceIndex] + '</span></li>' +
-            '<li date-formate="' + currentYear + '/' + startMonth + '/' + (k + 1) + '" class="active-date"><span>明天</span><span class="red">￥' + _this.priceData[priceIndex + 1] + '</span></li>';
-          k += 2;
-          priceIndex += 2;
+          if (_this.priceData[priceIndex] == '可约') {
+            str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><p style="font-weight:bold;">今天</p><span class="red">' + _this.priceData[priceIndex] + '</span></li>'
+          } else {
+            str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><p style="font-weight:bold;">今天</p><span>' + (_this.priceData.length > 0 ? _this.priceData[priceIndex] : "不可约") + '</span></li>'
+          }
+          //str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><p style="font-weight:bold;">今天</p><span class="red">' + _this.priceData[priceIndex] + '</span></li>'
+          //'<li date-formate="' + currentYear + '/' + startMonth + '/' + (k + 1) + '" class="active-date"><span>明天</span><span class="red">￥' + _this.priceData[priceIndex + 1] + '</span></li>';
+          k += 1;
+          priceIndex += 1;
           continue;
         }
 
         if (currentDate > k && (currentMonth + 1) === startMonth && currentYear === _this.currentYear) {
-          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><span>' + k + '</span><span class="red"></span></li>';
+          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><p>' + k + '</p><span class="red"></span></li>';
         } else {
-          if (_this.priceData[priceIndex]) {
-            str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><span>' + k + '</span><span class="red">￥' + _this.priceData[priceIndex] + '</span></li>';
+          if (_this.priceData[priceIndex] == '可约') {
+            str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><p>' + k + '</p><span class="red">' + _this.priceData[priceIndex] + '</span></li>';
           } else {
-            str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><span>' + k + '</span><span class="red"></span></li>';
+            if(_this.priceData[priceIndex]) {
+              str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><p>' + k + '</p><span class="">'+_this.priceData[priceIndex]+'</span></li>';
+            }else {
+              str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><p>' + k + '</p><span class=""></span></li>';
+            }
           }
           priceIndex += 1;
         }
@@ -125,24 +137,23 @@
         '<ul class="clearfix">';
 
       startDay = getWeek(currentYear, startMonth);
-
       for (var j = 0; j < startDay; j += 1) {
-        str += '<li><span></span><span></span></li>';
+        str += '<li><p></p><span></span></li>';
       }
 
       for (var k = 1; k <= monthDays;) {
         if (currentDate === k && (currentMonth + 1) === startMonth && currentYear === _this.currentYear) {
-          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><span>今天</span></li>' +
-            '<li date-formate="' + currentYear + '/' + startMonth + '/' + (k + 1) + '" class="active-date"><span>明天</span></li>';
+          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><p>今天</p></li>' +
+            '<li date-formate="' + currentYear + '/' + startMonth + '/' + (k + 1) + '" class="active-date"><p>明天</p></li>';
           k += 2;
           priceIndex += 2;
           continue;
         }
 
         if (currentDate > k && (currentMonth + 1) === startMonth && currentYear === _this.currentYear) {
-          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><span>' + k + '</span></li>';
+          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="disabled"><p>' + k + '</p></li>';
         } else {
-          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><span>' + k + '</span></li>';
+          str += '<li date-formate="' + currentYear + '/' + startMonth + '/' + k + '" class="active-date"><p>' + k + '</p></li>';
           priceIndex += 1;
         }
 
@@ -172,18 +183,18 @@
 
     var str =
       '<div class="calendar-wraper" id="calendar-wraper">' +
-      '<div class="calendar-top-wraper">' +
-      '<div class="calendar-top-title-wraper clearfix">' +
-      '<div class="text">请选择取还机时间</div>' +
-      '<div class="calendar-complete-button" id="calendar-complete-button">' +
-      '<a href="javascript:;">完成</a>' +
-      '</div>' +
-      '</div>' +
-      '<div class="week-bar">' +
-      '<ul><li class="weekend">日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li class="weekend">六</li></ul>' +
-      '</div>' +
-      '<div class="current-month-bar" id="current-month-bar">' + currentYear + '年' + (currentMonth + 1) + '月</div>' +
-      '</div>' +
+      //'<div class="calendar-top-wraper">' +
+      //'<div class="calendar-top-title-wraper clearfix">' +
+      //'<div class="text">请选择取还机时间</div>' +
+      //'<div class="calendar-complete-button" id="calendar-complete-button">' +
+      //'<a href="javascript:;">完成</a>' +
+      //'</div>' +
+      //'</div>' +
+      //'<div class="week-bar">' +
+      //'<ul><li class="weekend">日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li class="weekend">六</li></ul>' +
+      // '</div>' +
+      //'<div class="current-month-bar" id="current-month-bar">' + currentYear + '年' + (currentMonth + 1) + '月</div>' +
+      //'</div>' +
       '<div class="calendar-bottom-wraper" id="calendar-bottom-wraper">';
 
     str += _this.priceData ? _this.renderPriceElement(currentYear, currentMonth, currentDate, monthCount, monthDays, startMonth, priceIndex)
@@ -318,16 +329,17 @@
   };
 
   Calendar.prototype.init = function () {
-    oDoc.body.appendChild(strToDom(this.createElement()));
+    var wrap = oDoc.querySelector('.date_show_wrap')
+    wrap.appendChild(strToDom(this.createElement()));
 
     var calendarBottomWraper = oDoc.querySelector('#calendar-bottom-wraper'),
       calendarWraper = oDoc.querySelector('#calendar-wraper');
 
-    calendarBottomWraper.style.height = calendarWraper.offsetHeight - 80 + 'px';
+    //calendarBottomWraper.style.height = calendarWraper.offsetHeight - 80 + 'px';
 
-    this.chooseDate();
-    this.confirmDate();
-    this.calendarScroll(calendarWraper);
+    //this.chooseDate();
+    //this.confirmDate();
+    //this.calendarScroll(calendarWraper);
 
     calendarBottomWraper = null;
   };
